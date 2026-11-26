@@ -1,0 +1,385 @@
+[
+ {
+  "name": "Veggie omelette",
+  "minutes": 10,
+  "ingredients": [
+   "egg",
+   "milk",
+   "cheese",
+   "spinach",
+   "bell pepper",
+   "onion"
+  ],
+  "steps": [
+   "Whisk eggs with a splash of milk.",
+   "Soften chopped vegetables in a pan.",
+   "Pour in eggs, add cheese, fold."
+  ]
+ },
+ {
+  "name": "Fried rice",
+  "minutes": 15,
+  "ingredients": [
+   "rice",
+   "egg",
+   "carrot",
+   "peas",
+   "green onion",
+   "soy sauce"
+  ],
+  "steps": [
+   "Use cold cooked rice.",
+   "Scramble eggs, set aside.",
+   "Stir-fry vegetables, add rice and soy sauce, return eggs."
+  ]
+ },
+ {
+  "name": "Chicken stir-fry",
+  "minutes": 20,
+  "ingredients": [
+   "chicken",
+   "broccoli",
+   "bell pepper",
+   "carrot",
+   "garlic",
+   "soy sauce",
+   "rice"
+  ],
+  "steps": [
+   "Slice chicken thin and sear.",
+   "Add vegetables and garlic.",
+   "Sauce with soy, serve over rice."
+  ]
+ },
+ {
+  "name": "Pasta primavera",
+  "minutes": 20,
+  "ingredients": [
+   "pasta",
+   "zucchini",
+   "tomato",
+   "spinach",
+   "parmesan",
+   "garlic"
+  ],
+  "steps": [
+   "Boil pasta.",
+   "Saute garlic and vegetables.",
+   "Toss with pasta and parmesan."
+  ]
+ },
+ {
+  "name": "Tomato egg stir-fry",
+  "minutes": 10,
+  "ingredients": [
+   "tomato",
+   "egg",
+   "green onion",
+   "sugar"
+  ],
+  "steps": [
+   "Scramble eggs softly, remove.",
+   "Cook tomatoes until saucy with a pinch of sugar.",
+   "Fold eggs back in, top with green onion."
+  ]
+ },
+ {
+  "name": "Yogurt parfait",
+  "minutes": 5,
+  "ingredients": [
+   "yogurt",
+   "berries",
+   "granola",
+   "honey"
+  ],
+  "steps": [
+   "Layer yogurt, berries and granola.",
+   "Drizzle honey."
+  ]
+ },
+ {
+  "name": "Banana smoothie",
+  "minutes": 5,
+  "ingredients": [
+   "banana",
+   "milk",
+   "yogurt",
+   "spinach",
+   "peanut butter"
+  ],
+  "steps": [
+   "Blend everything until smooth."
+  ]
+ },
+ {
+  "name": "Quesadilla",
+  "minutes": 10,
+  "ingredients": [
+   "tortilla",
+   "cheese",
+   "bell pepper",
+   "onion",
+   "chicken",
+   "salsa"
+  ],
+  "steps": [
+   "Fill a tortilla with cheese and fillings.",
+   "Toast both sides until melted.",
+   "Serve with salsa."
+  ]
+ },
+ {
+  "name": "Grilled cheese and tomato soup",
+  "minutes": 20,
+  "ingredients": [
+   "bread",
+   "cheese",
+   "butter",
+   "tomato",
+   "onion",
+   "milk"
+  ],
+  "steps": [
+   "Simmer tomatoes and onion, blend with a little milk.",
+   "Butter bread, grill with cheese."
+  ]
+ },
+ {
+  "name": "Chicken soup",
+  "minutes": 40,
+  "ingredients": [
+   "chicken",
+   "carrot",
+   "celery",
+   "onion",
+   "noodles",
+   "garlic"
+  ],
+  "steps": [
+   "Simmer chicken with vegetables in water 25 min.",
+   "Shred chicken, add noodles, cook until tender."
+  ]
+ },
+ {
+  "name": "Caesar-ish salad",
+  "minutes": 10,
+  "ingredients": [
+   "lettuce",
+   "parmesan",
+   "bread",
+   "lemon",
+   "egg"
+  ],
+  "steps": [
+   "Toast bread cubes.",
+   "Whisk lemon, oil and grated parmesan.",
+   "Toss with lettuce; top with boiled egg."
+  ]
+ },
+ {
+  "name": "Overnight oats",
+  "minutes": 5,
+  "ingredients": [
+   "oats",
+   "milk",
+   "yogurt",
+   "berries",
+   "banana"
+  ],
+  "steps": [
+   "Mix oats, milk and yogurt.",
+   "Chill overnight, top with fruit."
+  ]
+ },
+ {
+  "name": "Pancakes",
+  "minutes": 20,
+  "ingredients": [
+   "flour",
+   "milk",
+   "egg",
+   "butter",
+   "berries"
+  ],
+  "steps": [
+   "Whisk flour, milk, egg and melted butter.",
+   "Cook spoonfuls on a hot pan, flip when bubbly."
+  ]
+ },
+ {
+  "name": "Shakshuka",
+  "minutes": 25,
+  "ingredients": [
+   "egg",
+   "tomato",
+   "bell pepper",
+   "onion",
+   "garlic",
+   "feta"
+  ],
+  "steps": [
+   "Cook onion, pepper and garlic.",
+   "Add tomatoes and simmer.",
+   "Crack eggs in, cover until set, top with feta."
+  ]
+ },
+ {
+  "name": "Tuna salad sandwich",
+  "minutes": 10,
+  "ingredients": [
+   "tuna",
+   "mayonnaise",
+   "celery",
+   "bread",
+   "lettuce"
+  ],
+  "steps": [
+   "Mix tuna, mayo and diced celery.",
+   "Pile on bread with lettuce."
+  ]
+ },
+ {
+  "name": "Mushroom risotto",
+  "minutes": 35,
+  "ingredients": [
+   "rice",
+   "mushroom",
+   "onion",
+   "parmesan",
+   "butter",
+   "broth"
+  ],
+  "steps": [
+   "Toast rice with onion.",
+   "Add warm broth a ladle at a time, stirring.",
+   "Stir in sauteed mushrooms, butter and parmesan."
+  ]
+ },
+ {
+  "name": "Black bean tacos",
+  "minutes": 15,
+  "ingredients": [
+   "tortilla",
+   "black beans",
+   "avocado",
+   "tomato",
+   "onion",
+   "lime",
+   "cheese"
+  ],
+  "steps": [
+   "Warm beans with spices.",
+   "Fill tortillas, top with avocado, tomato and lime."
+  ]
+ },
+ {
+  "name": "Baked salmon and greens",
+  "minutes": 20,
+  "ingredients": [
+   "salmon",
+   "lemon",
+   "broccoli",
+   "garlic",
+   "rice"
+  ],
+  "steps": [
+   "Roast salmon and broccoli at 400F for 12-15 min with lemon and garlic.",
+   "Serve with rice."
+  ]
+ },
+ {
+  "name": "Pho-style beef noodle soup",
+  "minutes": 30,
+  "ingredients": [
+   "beef",
+   "rice noodles",
+   "broth",
+   "onion",
+   "ginger",
+   "green onion",
+   "lime"
+  ],
+  "steps": [
+   "Simmer broth with charred onion and ginger.",
+   "Pour over noodles and thin raw beef slices.",
+   "Top with green onion and lime."
+  ]
+ },
+ {
+  "name": "Fruit salad",
+  "minutes": 5,
+  "ingredients": [
+   "apple",
+   "banana",
+   "berries",
+   "orange",
+   "grapes",
+   "yogurt"
+  ],
+  "steps": [
+   "Chop fruit, toss gently, top with yogurt."
+  ]
+ },
+ {
+  "name": "Cheesy potato hash",
+  "minutes": 25,
+  "ingredients": [
+   "potato",
+   "onion",
+   "bell pepper",
+   "egg",
+   "cheese"
+  ],
+  "steps": [
+   "Pan-fry diced potatoes until crisp.",
+   "Add onion and pepper.",
+   "Top with eggs and cheese, cover until set."
+  ]
+ },
+ {
+  "name": "Spinach and ham frittata",
+  "minutes": 25,
+  "ingredients": [
+   "egg",
+   "spinach",
+   "ham",
+   "cheese",
+   "milk",
+   "onion"
+  ],
+  "steps": [
+   "Whisk eggs and milk.",
+   "Cook spinach, ham and onion in an oven-safe pan.",
+   "Add eggs and cheese, finish under the broiler."
+  ]
+ },
+ {
+  "name": "Cucumber yogurt salad",
+  "minutes": 5,
+  "ingredients": [
+   "cucumber",
+   "yogurt",
+   "garlic",
+   "lemon",
+   "dill"
+  ],
+  "steps": [
+   "Slice cucumber, mix with yogurt, garlic, lemon and dill."
+  ]
+ },
+ {
+  "name": "Leftover rice porridge",
+  "minutes": 20,
+  "ingredients": [
+   "rice",
+   "broth",
+   "egg",
+   "ginger",
+   "green onion"
+  ],
+  "steps": [
+   "Simmer rice in broth until creamy.",
+   "Stir in a beaten egg, top with ginger and green onion."
+  ]
+ }
+]
