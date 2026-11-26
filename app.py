@@ -4,9 +4,9 @@
 """
 import streamlit as st
 
-st.set_page_config(page_title="CSc 8830 Computer Vision", page_icon="🔭", layout="centered")
-st.title("Computer Vision, CSc 8830")
-st.caption("Every module assignment and the final project run here. Open the menu (top left on a phone) to pick a page.")
+from cvlib.ui import page
+
+page("Computer Vision", "Every module assignment and the final project run here. Pick one below, or open the menu at the top left.")
 
 PAGES = [
     ("pages/1_Module_2_Measure.py", "Module 2: Measure",

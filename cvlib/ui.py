@@ -14,8 +14,52 @@ except Exception:  # pragma: no cover
     HAVE_TAP = False
 
 
+SITE_URL = "https://jwinn19464.github.io/"
+
+# Styles that the theme settings can't express: the starry sky, gradient titles,
+# angled tabs and buttons, and framed panels, all taken from Jenifer's World.
+CSS = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&display=swap');
+:root{--mint:#86cde8;--pink:#e79ac4;--card:rgba(30,22,66,.78);--line:rgba(190,175,255,.45);--hud:"Chakra Petch",monospace}
+[data-testid="stApp"]{background:
+  radial-gradient(1.5px 1.5px at 12% 18%,#fff8,transparent 60%),radial-gradient(1px 1px at 78% 12%,#fff9,transparent 60%),
+  radial-gradient(1.5px 1.5px at 42% 64%,#fff6,transparent 60%),radial-gradient(1px 1px at 88% 52%,#fff8,transparent 60%),
+  radial-gradient(1px 1px at 24% 86%,#fff7,transparent 60%),radial-gradient(1.5px 1.5px at 64% 34%,#fff6,transparent 60%),
+  radial-gradient(120% 60% at 50% 110%,rgba(231,154,196,.22),transparent 60%),
+  linear-gradient(180deg,#0f0b26 0%,#22164a 100%) fixed;}
+[data-testid="stHeader"]{background:transparent}
+h1{background:linear-gradient(90deg,var(--mint),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent!important;line-height:1.1!important}
+h2,h3{color:#e6e0fa}
+.hud{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--hud);font-weight:600;font-size:14px;letter-spacing:1px;margin:-8px 0 6px}
+.hud a{color:#e6e0fa!important;text-decoration:none;border:1px solid var(--line);background:var(--card);padding:4px 12px 4px 18px;clip-path:polygon(10px 0,100% 0,100% 100%,10px 100%,0 50%)}
+.hud span{color:var(--mint);text-transform:uppercase;letter-spacing:3px;font-size:12px}
+[data-testid="stCaptionContainer"]{color:#cdc5ec!important}
+.stTabs [role="tablist"]{gap:6px;flex-wrap:wrap;overflow:visible!important}
+.stTabs [role="tab"]{font-family:var(--hud);font-weight:700;font-size:14px;color:#e6e0fa;background:#2a1f5c;padding:6px 14px;height:auto;margin:0;
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
+.stTabs [role="tab"] p{font-family:var(--hud);font-weight:700;font-size:14px}
+.stTabs [role="tab"][aria-selected="true"]{background:linear-gradient(90deg,var(--mint),var(--pink));color:#120c2e!important}
+.stTabs [role="tab"][aria-selected="true"] p{color:#120c2e}
+.stTabs [data-baseweb="tab-highlight"],.stTabs [data-baseweb="tab-border"]{display:none}
+.stButton button,.stDownloadButton button,[data-testid="stPageLink"] a{font-family:var(--hud);font-weight:700;letter-spacing:.5px}
+.stButton button[kind="primary"]{background:linear-gradient(90deg,var(--mint),var(--pink));color:#120c2e;border:0}
+[data-testid="stFileUploaderDropzone"]{background:var(--card);border:1.5px dashed var(--line)}
+[data-testid="stMetric"]{background:var(--card);border:1px solid var(--line);padding:10px 14px;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
+[data-testid="stMetricLabel"]{font-family:var(--hud);color:var(--mint)!important}
+[data-testid="stExpander"] details,[data-testid="stVerticalBlockBorderWrapper"]{background:var(--card)}
+[data-testid="stMarkdownContainer"] p,[data-testid="stMarkdownContainer"] li{font-size:1.02rem;line-height:1.6}
+[data-testid="stImage"] img{border:1px solid var(--line)}
+</style>
+"""
+
+
 def page(title: str, caption: str = ""):
     st.set_page_config(page_title=title, page_icon="🔭", layout="centered")
+    st.markdown(CSS, unsafe_allow_html=True)
+    st.markdown(f'<div class="hud"><a href="{SITE_URL}" target="_self">Jenifer\'s World</a><span>CSc 8830</span></div>',
+                unsafe_allow_html=True)
     st.title(title)
     if caption:
         st.caption(caption)

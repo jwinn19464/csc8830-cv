@@ -57,7 +57,8 @@ def calibrate_images(images, pattern=(9, 6), square=25.0):
     per = []
     for o, p, r, t in zip(objpts, imgpts, rvecs, tvecs):
         proj, _ = cv2.projectPoints(o, r, t, K, dist)
-        per.append(float(np.sqrt(np.mean(np.sum((proj - p) ** 2, axis=2)))))
+        d = proj.reshape(-1, 2) - np.asarray(p).reshape(-1, 2)  # OpenCV 4 vs 5 return different shapes
+        per.append(float(np.sqrt(np.mean(np.sum(d ** 2, axis=1)))))
     return {"K": K, "dist": dist.ravel(), "rms": float(rms), "size": size, "used": used,
             "per_image_err": per, "overlays": overlays, "rvecs": rvecs, "tvecs": tvecs}
 

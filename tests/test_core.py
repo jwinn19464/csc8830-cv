@@ -141,3 +141,28 @@ def test_keyframe_sharpness():
     rng = np.random.default_rng(6)
     g = rng.integers(0, 255, (200, 200)).astype(np.uint8)
     assert fft_sharpness(g) > fft_sharpness(cv2.GaussianBlur(g, (15, 15), 4))
+
+
+def test_calibration_synthetic():
+    from module2.calibrate import calibrate_images
+    sq = 50
+    board = np.full((7 * sq + 100, 10 * sq + 100), 255, np.uint8)
+    for r in range(7):
+        for c in range(10):
+            if (r + c) % 2 == 0:
+                board[50 + r * sq:50 + (r + 1) * sq, 50 + c * sq:50 + (c + 1) * sq] = 0
+    Kt = np.array([[900., 0, 640], [0, 900, 480], [0, 0, 1]])
+    h, w = board.shape
+    src = np.float32([[0, 0], [w, 0], [w, h], [0, h]])
+    rng = np.random.default_rng(7)
+    imgs = []
+    for _ in range(8):
+        R = cv2.Rodrigues(np.deg2rad(rng.uniform(-25, 25, 3) * [1, 1, 0.3]))[0]
+        t = np.array([rng.uniform(-80, 80), rng.uniform(-60, 60), rng.uniform(1300, 1700)])
+        P = np.c_[src - [w / 2, h / 2], np.zeros(4)]
+        x = (Kt @ (R @ P.T + t[:, None])).T
+        H = cv2.getPerspectiveTransform(src, np.float32(x[:, :2] / x[:, 2:]))
+        imgs.append(cv2.cvtColor(cv2.warpPerspective(board, H, (1280, 960), borderValue=150), cv2.COLOR_GRAY2BGR))
+    c = calibrate_images(imgs, (9, 6), 25.0)
+    assert c["rms"] < 0.5 and max(c["per_image_err"]) < 0.5
+    assert abs(c["K"][0, 0] - 900) < 20

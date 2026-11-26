@@ -1,6 +1,23 @@
+# Matches Jenifer's World: night-purple sky, mint-to-pink accents,
+# Unbounded headings, Atkinson Hyperlegible text, Chakra Petch labels.
 [theme]
 base = "dark"
-primaryColor = "#b48cff"
+primaryColor = "#e79ac4"
+backgroundColor = "#0f0b26"
+secondaryBackgroundColor = "#1d1640"
+textColor = "#e6e0fa"
+linkColor = "#86cde8"
+borderColor = "#4b3f86"
+baseRadius = "6px"
+font = "Atkinson Hyperlegible:https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap, sans-serif"
+headingFont = "Unbounded:https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&display=swap, sans-serif"
+codeFont = "monospace"
+headingFontWeights = [800, 700, 700]
+headingFontSizes = ["2.3rem", "1.5rem", "1.2rem"]
+chartCategoricalColors = ["#86cde8", "#e79ac4", "#e6c27a", "#b9a4ff", "#7fe0b5"]
+
+[theme.sidebar]
+backgroundColor = "#171135"
 
 [server]
 maxUploadSize = 300
