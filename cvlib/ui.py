@@ -28,7 +28,7 @@ CSS = """
   radial-gradient(1px 1px at 24% 86%,#fff7,transparent 60%),radial-gradient(1.5px 1.5px at 64% 34%,#fff6,transparent 60%),
   radial-gradient(120% 60% at 50% 110%,rgba(231,154,196,.22),transparent 60%),
   linear-gradient(180deg,#0f0b26 0%,#22164a 100%) fixed;}
-[data-testid="stHeader"]{background:transparent}
+[data-testid="stHeader"]{background:rgba(15,11,38,.88);backdrop-filter:blur(6px)}
 h1{background:linear-gradient(90deg,var(--mint),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent!important;line-height:1.1!important}
 h2,h3{color:#e6e0fa}
 .hud{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--hud);font-weight:600;font-size:14px;letter-spacing:1px;margin:-8px 0 6px}

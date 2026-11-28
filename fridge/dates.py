@@ -52,19 +52,108 @@ def text_regions(img_bgr, min_w=30):
     return sorted(boxes, key=lambda b: -b[2] * b[3])[:8]
 
 
-def ocr(img, deblur_sigma=0.0):
-    if not HAVE_OCR:
-        return ""
-    g = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) if img.ndim == 3 else img
-    g = cv2.resize(g, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
-    if deblur_sigma > 0:
+def ocr_variants(g_bgr, deblur_sigma=0.0, psf=None):
+    """Versions of the label that suit different print: plain, contrast-boosted (CLAHE), and the blue
+    and red channels (yellow or white print on coloured labels stands out in one of them)."""
+    g = cv2.cvtColor(g_bgr, cv2.COLOR_BGR2GRAY) if g_bgr.ndim == 3 else g_bgr
+    out = [g, cv2.createCLAHE(3.0, (8, 8)).apply(g)]
+    if g_bgr.ndim == 3:
+        out += [g_bgr[:, :, 0], g_bgr[:, :, 2]]
+    if psf is not None:  # motion blur measured from optical flow
+        out.append(wiener_deblur(g, psf, snr=60))
+    elif deblur_sigma > 0:
         from module3.blur import gaussian_kernel
         size = int(6 * deblur_sigma) | 1
-        g = wiener_deblur(g, gaussian_kernel(size, deblur_sigma))
-    texts = [pytesseract.image_to_string(g, config="--psm 6")]
-    for x, y, w, h in text_regions(g):
-        texts.append(pytesseract.image_to_string(g[y:y + h, x:x + w], config="--psm 7"))
+        out.append(wiener_deblur(g, gaussian_kernel(size, deblur_sigma)))
+    return out
+
+
+def ocr(img, deblur_sigma=0.0, psf=None):
+    """All text Tesseract finds in any version of the image (sparse-text mode, then line mode on text regions)."""
+    if not HAVE_OCR:
+        return ""
+    h, w = img.shape[:2]
+    if max(h, w) < 900:  # Tesseract reads small print better when enlarged
+        f = 900 / max(h, w)
+        img = cv2.resize(img, None, fx=f, fy=f, interpolation=cv2.INTER_CUBIC)
+    texts = []
+    for v in ocr_variants(img, deblur_sigma, psf):
+        texts.append(pytesseract.image_to_string(v, config="--psm 11"))
+    g = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) if img.ndim == 3 else img
+    for x, y, bw, bh in text_regions(g)[:5]:
+        texts.append(pytesseract.image_to_string(g[y:y + bh, x:x + bw], config="--psm 7"))
     return "\n".join(t.strip() for t in texts if t.strip())
+
+
+FOODS = sorted(set("""
+apple apples avocado bacon bagel banana beans beef beer berries blueberries bread broccoli broth butter cabbage
+carrot carrots celery cereal cheddar cheese chicken chickpeas chips chocolate cilantro coffee corn cottage cream
+cucumber cucumbers curry dumplings egg eggs feta fish flour garlic ginger granola grapes ham honey hummus jam jelly
+juice kale ketchup kimchi lemon lettuce lime mango mayonnaise milk miso mozzarella mushroom mushrooms mustard noodles
+oats olives onion orange pasta peanut peas pepper peppers pesto pickles pineapple pork potato potatoes ramen relish
+rice salami salmon salsa sauce sausage shrimp soda soup sour spinach sriracha strawberries sugar tofu tomato tomatoes
+tortilla tortillas tuna turkey vinegar water yogurt zucchini parmesan dressing ranch hotdogs wings
+""".split()))
+
+
+LABEL_WORDS = set("""ingredients ingredient select simply natural naturally organic fresh flavor flavored original
+net weight since contains made with free from best before used keep refrigerate refrigerated after opening serving
+servings calories nutrition facts total sodium protein classic premium family size value pack""".split())
+
+
+# Product phrases whose words would otherwise be read as different foods. Matched loosely: each word
+# may be misread a little, and up to two stray tokens ("&", "and", OCR noise) may sit between them.
+PHRASES = [
+    (("bread", "butter"), "pickles"), (("peanut", "butter"), "peanut butter"), (("cream", "cheese"), "cream cheese"),
+    (("sour", "cream"), "sour cream"), (("half", "half"), "half and half"), (("hot", "sauce"), "hot sauce"),
+    (("soy", "sauce"), "soy sauce"), (("almond", "milk"), "almond milk"), (("oat", "milk"), "oat milk"),
+    (("ice", "cream"), "ice cream"), (("orange", "juice"), "orange juice"), (("green", "onion"), "green onion"),
+    (("hot", "dogs"), "hot dogs"),
+]
+
+
+def _close(a, b):
+    import difflib
+    return a == b or (len(a) >= 4 and difflib.SequenceMatcher(None, a, b).ratio() >= 0.75)
+
+
+def suggest_names(text: str, n: int = 3):
+    """Food words in the OCR text, matched loosely so misreads still count (ACKLES -> pickles).
+    Known phrases are matched first and their words removed (BREAD & BUTTER CHIPS -> pickles, not bread)."""
+    import difflib
+    toks = [re.sub(r"[^a-z]", "", w) for w in text.lower().split()]
+    toks = [t for t in toks if t]
+    used, phrase_hits = set(), []
+    for (w1, w2), name in PHRASES:
+        for i, t in enumerate(toks):
+            if i in used or not _close(t, w1):
+                continue
+            for j in range(i + 1, min(len(toks), i + 4)):
+                if j not in used and _close(toks[j], w2):
+                    used.update({i, j})
+                    if name not in phrase_hits:
+                        phrase_hits.append(name)
+                    break
+    low = " ".join(t for k, t in enumerate(toks) if k not in used)
+    words = [re.sub(r"[^a-z]", "", w) for w in low.split()]
+    words = [w for w in words if len(w) >= 4 and
+             not any(difflib.SequenceMatcher(None, w, s).ratio() >= 0.8 for s in LABEL_WORDS)]
+    score = {}
+    for w in words:
+        for f in FOODS:
+            if len(f) < 4:
+                continue
+            r = difflib.SequenceMatcher(None, w, f).ratio()
+            if (f in w and len(f) >= 0.6 * len(w)) or (w in f and len(w) >= 0.7 * len(f)):
+                r = max(r, 0.9)
+            if len(w) < 5 and w != f:  # short fragments only count as exact words
+                continue
+            if r >= (0.75 if len(w) >= 6 else 0.8):
+                score[f] = score.get(f, 0) + r * len(f)
+    for name in phrase_hits:
+        score.pop(name, None)
+    ranked = phrase_hits + [f for f, _ in sorted(score.items(), key=lambda x: -x[1])]
+    return list(dict.fromkeys(ranked))[:n]
 
 
 def _year(y, today):

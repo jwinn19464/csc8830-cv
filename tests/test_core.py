@@ -166,3 +166,45 @@ def test_calibration_synthetic():
     c = calibrate_images(imgs, (9, 6), 25.0)
     assert c["rms"] < 0.5 and max(c["per_image_err"]) < 0.5
     assert abs(c["K"][0, 0] - 900) < 20
+
+
+def test_name_suggestions_and_closeup():
+    from fridge.dates import suggest_names
+    from fridge.items import detect_items
+    assert suggest_names("ORGANIC WHOLE MILK")[0] == "milk"
+    assert "pickles" in suggest_names("SIMPLY ACKLES SELECT INGREDIENTS")
+    assert "ginger" not in suggest_names("SELECT INGREDIENTS INGE")
+    assert suggest_names("SIMPLY PICKLES BREAD & BUTTER CHIPS")[0] == "pickles"
+    assert suggest_names("CREAMY PEANUT BUTTER")[0] == "peanut butter"
+    rng = np.random.default_rng(8)  # busy background, one big item in the middle
+    img = rng.integers(0, 255, (400, 300, 3)).astype(np.uint8)
+    cv2.rectangle(img, (60, 40), (240, 370), (40, 180, 220), -1)
+    boxes, _ = detect_items(img, one_item=True)
+    x, y, w, h = boxes[0]
+    assert len(boxes) == 1 and 40 <= x <= 90 and w >= 140
+
+
+def test_lowlight_stack_reduces_noise():
+    from fridge.enhance import noise_sigma, stack
+    rng = np.random.default_rng(9)
+    clean = cv2.GaussianBlur(rng.integers(0, 255, (240, 320, 3)).astype(np.uint8), (9, 9), 3)
+    frames = [np.clip(clean.astype(np.float32) + rng.normal(0, 10, clean.shape), 0, 255).astype(np.uint8)
+              for _ in range(5)]
+    st, used = stack(frames, 2, 2)
+    g = lambda x: cv2.cvtColor(x, cv2.COLOR_BGR2GRAY)  # noqa: E731
+    assert used == 5
+    assert noise_sigma(g(st)) < 0.7 * noise_sigma(g(frames[2]))
+
+
+def test_cluttered_finder_separates_packages():
+    from fridge.items import detect_items
+    rng = np.random.default_rng(10)
+    img = np.full((360, 480, 3), (60, 80, 110), np.uint8)  # plain brownish "bag" background
+    img = cv2.GaussianBlur((img + rng.integers(0, 20, img.shape)).astype(np.uint8), (15, 15), 0)
+    for x0, col in [(40, (200, 60, 20)), (290, (30, 40, 200))]:  # two colourful, text-covered packages
+        cv2.rectangle(img, (x0, 60), (x0 + 150, 300), col, -1)
+        for k in range(6):
+            cv2.putText(img, "SOUP 12", (x0 + 8, 95 + 35 * k), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+    boxes, _ = detect_items(img, mode="clutter")
+    centres = sorted(x + w / 2 for x, y, w, h in boxes)
+    assert len(boxes) >= 2 and centres[0] < 240 < centres[-1]
